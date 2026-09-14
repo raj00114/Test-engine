@@ -1,0 +1,23 @@
+[
+  {
+    "exam": "JHTET 2026",
+    "paper": "Primary level (Classes 1–5)",
+    "subject": "गणित",
+    "topic": "सामान्य गणित",
+    "subtopic": "संख्याएँ – संख्याएँ एवं गणितीय संक्रियाएँ"
+  },
+  {
+    "exam": "JHTET 2026",
+    "paper": "Primary level (Classes 1–5)",
+    "subject": "गणित",
+    "topic": "सामान्य गणित",
+    "subtopic": "ज्यामिति और स्थानिक समझ – आकृतियाँ, ठोस आकृतियाँ (द्विविमीय एवं त्रिविमीय), सममिति"
+  },
+  {
+    "exam": "JHTET 2026",
+    "paper": "Primary level (Classes 1–5)",
+    "subject": "गणित",
+    "topic": "मापन और इकाइयाँ",
+    "subtopic": "लंबाई, मात्रा, भार, आयतन, समय, आदि"
+  }
+]
