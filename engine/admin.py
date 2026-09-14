@@ -10,6 +10,7 @@ class QuestionAdmin(admin.ModelAdmin):
         "paper",
         "subject",
         "topic",
+        "subtopic",
         "difficulty",
         "correct_answer",
     )
@@ -26,6 +27,7 @@ class QuestionAdmin(admin.ModelAdmin):
         "question_text",
         "question_text_hindi",
         "topic",
+        "subtopic",
         "source",
     )
 
@@ -38,6 +40,7 @@ class QuestionAdmin(admin.ModelAdmin):
                     "paper",
                     "subject",
                     "topic",
+                    "subtopic",
                     "difficulty",
                     "language",
                     "source",
