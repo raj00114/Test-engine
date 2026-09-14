@@ -20,6 +20,7 @@ class Question(models.Model):
     paper = models.CharField(max_length=50, blank=True)
     subject = models.CharField(max_length=100)
     topic = models.CharField(max_length=150, blank=True)
+    subtopic = models.CharField(max_length=200, blank=True)
 
     question_text = models.TextField()
     question_text_hindi = models.TextField(blank=True)
