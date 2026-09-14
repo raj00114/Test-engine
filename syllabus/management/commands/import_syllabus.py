@@ -9,6 +9,13 @@ from syllabus.models import Syllabus
 class Command(BaseCommand):
     help = "Import JHTET syllabus data from syllabus_data.json"
 
+    def add_arguments(self, parser):
+        parser.add_argument(
+            "--replace",
+            action="store_true",
+            help="Delete existing syllabus records before importing.",
+        )
+
     def handle(self, *args, **options):
         data_file = Path(__file__).resolve().parents[2] / "syllabus_data.json"
 
@@ -38,9 +45,6 @@ class Command(BaseCommand):
             "subtopic",
         }
 
-        created = 0
-        updated = 0
-
         for index, item in enumerate(data, start=1):
             if not isinstance(item, dict):
                 raise CommandError(
@@ -55,6 +59,16 @@ class Command(BaseCommand):
                     f"{', '.join(sorted(missing))}"
                 )
 
+        if options["replace"]:
+            deleted_count, _ = Syllabus.objects.all().delete()
+            self.stdout.write(
+                f"Deleted {deleted_count} existing syllabus record(s)."
+            )
+
+        created = 0
+        updated = 0
+
+        for item in data:
             _, was_created = Syllabus.objects.update_or_create(
                 exam=item["exam"],
                 paper=item["paper"],
