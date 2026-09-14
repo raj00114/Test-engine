@@ -4,20 +4,139 @@
     "paper": "Primary level (Classes 1–5)",
     "subject": "गणित",
     "topic": "सामान्य गणित",
-    "subtopic": "संख्याएँ – संख्याएँ एवं गणितीय संक्रियाएँ"
+    "subtopic": "संख्याएँ एवं गणितीय संक्रियाएँ"
   },
   {
     "exam": "JHTET 2026",
     "paper": "Primary level (Classes 1–5)",
     "subject": "गणित",
     "topic": "सामान्य गणित",
-    "subtopic": "ज्यामिति और स्थानिक समझ – आकृतियाँ, ठोस आकृतियाँ (द्विविमीय एवं त्रिविमीय), सममिति"
+    "subtopic": "ज्यामिति और स्थानिक समझ: आकृतियाँ, ठोस आकृतियाँ, सममिति"
   },
   {
     "exam": "JHTET 2026",
     "paper": "Primary level (Classes 1–5)",
     "subject": "गणित",
-    "topic": "मापन और इकाइयाँ",
-    "subtopic": "लंबाई, मात्रा, भार, आयतन, समय, आदि"
+    "topic": "सामान्य गणित",
+    "subtopic": "मापन और इकाइयाँ: लंबाई, मात्रा, भार, आयतन, समय"
+  },
+  {
+    "exam": "JHTET 2026",
+    "paper": "Primary level (Classes 1–5)",
+    "subject": "गणित",
+    "topic": "सामान्य गणित",
+    "subtopic": "व्यावहारिक एवं वाणिज्यिक गणित: मुद्रा, लाभ-हानि, साधारण ब्याज, क्षेत्रमिति, प्रतिशत, भिन्न, आंकड़ों का प्रबंधन, पैटर्न"
+  },
+  {
+    "exam": "JHTET 2026",
+    "paper": "Primary level (Classes 1–5)",
+    "subject": "गणित",
+    "topic": "शिक्षण शास्त्रीय आयाम",
+    "subtopic": "गणित की प्रकृति एवं स्वरूप"
+  },
+  {
+    "exam": "JHTET 2026",
+    "paper": "Primary level (Classes 1–5)",
+    "subject": "गणित",
+    "topic": "शिक्षण शास्त्रीय आयाम",
+    "subtopic": "गणित शिक्षण की विधियाँ"
+  },
+  {
+    "exam": "JHTET 2026",
+    "paper": "Primary level (Classes 1–5)",
+    "subject": "गणित",
+    "topic": "शिक्षण शास्त्रीय आयाम",
+    "subtopic": "गणित शिक्षण की समस्याएँ एवं चुनौतियाँ"
+  },
+  {
+    "exam": "JHTET 2026",
+    "paper": "Primary level (Classes 1–5)",
+    "subject": "गणित",
+    "topic": "शिक्षण शास्त्रीय आयाम",
+    "subtopic": "निदानात्मक एवं उपचारात्मक शिक्षण तथा मूल्यांकन (CCE/HPC)"
+  },
+  {
+    "exam": "JHTET 2026",
+    "paper": "Primary level (Classes 1–5)",
+    "subject": "गणित",
+    "topic": "शिक्षण शास्त्रीय आयाम",
+    "subtopic": "विशेष संदर्भ: NEP 2020, NCF-FS, NCF-SE"
+  },
+  {
+    "exam": "JHTET 2026",
+    "paper": "Upper-primary level (Classes 6–8)",
+    "subject": "गणित",
+    "topic": "सामान्य गणित",
+    "subtopic": "संख्या पद्धति, संख्या की समझ, प्राकृतिक/पूर्ण संख्याएँ, परिमेय संख्याएँ, पूर्णांक, घातांक, ऋणात्मक संख्याएँ, भिन्न, वर्ग, वर्गमूल, घन, घनमूल, HCF, LCM"
+  },
+  {
+    "exam": "JHTET 2026",
+    "paper": "Upper-primary level (Classes 6–8)",
+    "subject": "गणित",
+    "topic": "बीज गणित",
+    "subtopic": "चर/अचर संख्याएँ, चर की घात, बीजीय व्यंजक एवं संक्रियाएँ"
+  },
+  {
+    "exam": "JHTET 2026",
+    "paper": "Upper-primary level (Classes 6–8)",
+    "subject": "गणित",
+    "topic": "अंक गणित",
+    "subtopic": "अनुपात, समानुपात, ऐकिक नियम, प्रतिशत, लाभ-हानि, साधारण/चक्रवृद्धि ब्याज, समय एवं दूरी, समय एवं काम"
+  },
+  {
+    "exam": "JHTET 2026",
+    "paper": "Upper-primary level (Classes 6–8)",
+    "subject": "गणित",
+    "topic": "ज्यामिति",
+    "subtopic": "द्विविमीय, त्रिविमीय, सममिति"
+  },
+  {
+    "exam": "JHTET 2026",
+    "paper": "Upper-primary level (Classes 6–8)",
+    "subject": "गणित",
+    "topic": "क्षेत्रमिति",
+    "subtopic": "परिमिति, क्षेत्रफल, आयतन"
+  },
+  {
+    "exam": "JHTET 2026",
+    "paper": "Upper-primary level (Classes 6–8)",
+    "subject": "गणित",
+    "topic": "आंकड़ों का प्रयोग",
+    "subtopic": "आंकड़ों का संग्रह एवं उन्हें व्यवस्थित करना"
+  },
+  {
+    "exam": "JHTET 2026",
+    "paper": "Upper-primary level (Classes 6–8)",
+    "subject": "गणित",
+    "topic": "ग्राफ",
+    "subtopic": "पाई/दण्ड चार्ट, अवर्गीकृत आंकड़ों का चित्र, दण्ड आरेख, मिश्रित दण्ड आरेख"
+  },
+  {
+    "exam": "JHTET 2026",
+    "paper": "Upper-primary level (Classes 6–8)",
+    "subject": "गणित",
+    "topic": "शिक्षण शास्त्रीय आयाम",
+    "subtopic": "गणितीय/तार्किक चिंतन की प्रकृति"
+  },
+  {
+    "exam": "JHTET 2026",
+    "paper": "Upper-primary level (Classes 6–8)",
+    "subject": "गणित",
+    "topic": "शिक्षण शास्त्रीय आयाम",
+    "subtopic": "गणित की प्रकृति एवं स्वरूप; शिक्षण की विधियाँ एवं समस्याएँ"
+  },
+  {
+    "exam": "JHTET 2026",
+    "paper": "Upper-primary level (Classes 6–8)",
+    "subject": "गणित",
+    "topic": "शिक्षण शास्त्रीय आयाम",
+    "subtopic": "निदानात्मक एवं उपचारात्मक शिक्षण तथा मूल्यांकन"
+  },
+  {
+    "exam": "JHTET 2026",
+    "paper": "Upper-primary level (Classes 6–8)",
+    "subject": "गणित",
+    "topic": "शिक्षण शास्त्रीय आयाम",
+    "subtopic": "NEP 2020 के संदर्भ में 04 ब्लॉक अप्रोच; ELPS"
   }
 ]
