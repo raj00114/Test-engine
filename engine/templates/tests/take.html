@@ -10,9 +10,6 @@
 
 <p>{{ test.description }}</p>
 
-<p>
-    <strong>Duration:</strong> {{ test.duration_minutes }} minutes
-</p>
 
 <p>
     <strong>Questions:</strong> {{ questions|length }}
@@ -30,8 +27,8 @@
     </p>
 
     <p>
-    <strong>Percentage:</strong>
-    {{ result.percentage }}%
+        <strong>Percentage:</strong>
+        {{ result.percentage }}%
     </p>
 
     <p>
@@ -121,6 +118,14 @@
 
 {% else %}
 
+   <div id="timer">
+    <strong>Time Remaining:</strong>
+    <span id="time">--:--</span>
+</div>
+
+    <hr>
+    <hr>
+
     <form method="post">
 
         {% csrf_token %}
@@ -194,6 +199,29 @@
         </button>
 
     </form>
+
+    <script>
+        const durationMinutes = {{ test.duration_minutes }};
+        let timeRemaining = durationMinutes * 60;
+
+        function updateTimer() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+
+            document.getElementById("time").textContent =
+                String(minutes).padStart(2, "0") +
+                ":" +
+                String(seconds).padStart(2, "0");
+
+            if (timeRemaining > 0) {
+                timeRemaining--;
+            }
+        }
+
+        updateTimer();
+
+        setInterval(updateTimer, 1000);
+    </script>
 
 {% endif %}
 
