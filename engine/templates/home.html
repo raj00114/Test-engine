@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block title %}
+Home — JHTET Test Engine
+{% endblock %}
+
+{% block content %}
+
+<h2>Prepare for JHTET 2026</h2>
+
+<p>
+    Practice JHTET questions, take mock tests, and improve your preparation.
+</p>
+
+<h3>Available Tests</h3>
+
+{% if tests %}
+
+    <ul>
+        {% for test in tests %}
+            <li>
+                <a href="{% url 'take_test' test.pk %}">
+                    {{ test.title }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+
+{% else %}
+
+    <p>No tests are available yet.</p>
+
+{% endif %}
+
+{% endblock %}

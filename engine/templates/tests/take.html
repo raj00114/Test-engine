@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+
+{% block title %}
+{{ test.title }} — JHTET Test Engine
+{% endblock %}
+
+{% block content %}
+
+<h2>{{ test.title }}</h2>
+
+<p>{{ test.description }}</p>
+
+<p>
+    <strong>Duration:</strong> {{ test.duration_minutes }} minutes
+</p>
+
+<p>
+    <strong>Questions:</strong> {{ questions|length }}
+</p>
+
+{% if result %}
+
+    <hr>
+
+    <h3>Test Result</h3>
+
+    <p>
+        <strong>Score:</strong>
+        {{ result.score }} / {{ result.total }}
+    </p>
+
+    <p>
+    <strong>Percentage:</strong>
+    {{ result.percentage }}%
+    </p>
+
+    <p>
+        <strong>Answered:</strong>
+        {{ result.answered }}
+    </p>
+
+    <p>
+        <strong>Unanswered:</strong>
+        {{ result.unanswered }}
+    </p>
+
+    <hr>
+
+    <h3>Answer Review</h3>
+
+    {% for item in result.review %}
+
+        <article>
+
+            <h4>
+                Question {{ forloop.counter }}
+            </h4>
+
+            <p>
+                <strong>{{ item.question.question_text }}</strong>
+            </p>
+
+            {% if item.question.question_text_hindi %}
+                <p>{{ item.question.question_text_hindi }}</p>
+            {% endif %}
+
+            {% if item.is_correct %}
+
+                <p>
+                    ✅ <strong>Correct</strong>
+                </p>
+
+            {% else %}
+
+                <p>
+                    ❌ <strong>Incorrect</strong>
+                </p>
+
+            {% endif %}
+
+            <p>
+                <strong>Your answer:</strong>
+
+                {% if item.selected_answer %}
+                    {{ item.selected_answer }}
+                {% else %}
+                    Not answered
+                {% endif %}
+            </p>
+
+            <p>
+                <strong>Correct answer:</strong>
+                {{ item.question.correct_answer }}
+            </p>
+
+            {% if item.question.explanation %}
+                <p>
+                    <strong>Explanation:</strong>
+                    {{ item.question.explanation }}
+                </p>
+            {% endif %}
+
+            {% if item.question.explanation_hindi %}
+                <p>
+                    <strong>व्याख्या:</strong>
+                    {{ item.question.explanation_hindi }}
+                </p>
+            {% endif %}
+
+        </article>
+
+        <hr>
+
+    {% endfor %}
+
+    <p>
+        <a href="{% url 'take_test' test.pk %}">
+            Try Again
+        </a>
+    </p>
+
+{% else %}
+
+    <form method="post">
+
+        {% csrf_token %}
+
+        {% for question in questions %}
+
+            <article>
+
+                <h3>
+                    Question {{ forloop.counter }}
+                </h3>
+
+                <p>
+                    <strong>{{ question.question_text }}</strong>
+                </p>
+
+                {% if question.question_text_hindi %}
+                    <p>{{ question.question_text_hindi }}</p>
+                {% endif %}
+
+                <label>
+                    <input
+                        type="radio"
+                        name="question_{{ question.pk }}"
+                        value="A"
+                    >
+                    A. {{ question.option_a }}
+                </label>
+
+                <br>
+
+                <label>
+                    <input
+                        type="radio"
+                        name="question_{{ question.pk }}"
+                        value="B"
+                    >
+                    B. {{ question.option_b }}
+                </label>
+
+                <br>
+
+                <label>
+                    <input
+                        type="radio"
+                        name="question_{{ question.pk }}"
+                        value="C"
+                    >
+                    C. {{ question.option_c }}
+                </label>
+
+                <br>
+
+                <label>
+                    <input
+                        type="radio"
+                        name="question_{{ question.pk }}"
+                        value="D"
+                    >
+                    D. {{ question.option_d }}
+                </label>
+
+            </article>
+
+            <hr>
+
+        {% endfor %}
+
+        <button type="submit">
+            Submit Test
+        </button>
+
+    </form>
+
+{% endif %}
+
+{% endblock %}

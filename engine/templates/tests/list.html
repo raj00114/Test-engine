@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}
+Tests — JHTET Test Engine
+{% endblock %}
+
+{% block content %}
+
+<h2>JHTET Practice Tests</h2>
+
+{% if tests %}
+
+    {% for test in tests %}
+
+        <article>
+            <h3>{{ test.title }}</h3>
+
+            <p>{{ test.description }}</p>
+
+            <p>
+                <strong>Exam:</strong> {{ test.exam }}
+            </p>
+
+            <p>
+                <strong>Paper:</strong> {{ test.paper }}
+            </p>
+
+            <p>
+                <strong>Duration:</strong> {{ test.duration_minutes }} minutes
+            </p>
+
+            <p>
+                <strong>Questions:</strong> {{ test.questions.count }}
+            </p>
+
+            <a href="{% url 'take_test' test.pk %}">
+                Start Test
+            </a>
+        </article>
+
+        <hr>
+
+    {% endfor %}
+
+{% else %}
+
+    <p>No published tests are available yet.</p>
+
+{% endif %}
+
+{% endblock %}
