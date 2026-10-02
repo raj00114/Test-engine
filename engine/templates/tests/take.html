@@ -4,225 +4,526 @@
 {{ test.title }} — JHTET Test Engine
 {% endblock %}
 
+{% block extra_head %}
+<style>
+    .sticky-toolbar {
+        position: sticky;
+        top: 60px;
+        z-index: 90;
+        background: #ffffff;
+        border: 1px solid var(--gray-200);
+        border-radius: var(--radius);
+        padding: 0.75rem 1.25rem;
+        margin-bottom: 1.5rem;
+        box-shadow: var(--shadow-md);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 0.75rem;
+    }
+
+    .timer-badge {
+        font-size: 1.15rem;
+        font-weight: 700;
+        padding: 0.4rem 0.8rem;
+        border-radius: var(--radius);
+        background: var(--gray-100);
+        color: var(--gray-800);
+        display: inline-flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .timer-warning {
+        background-color: var(--danger-bg);
+        color: var(--danger);
+        animation: pulse 1s infinite alternate;
+    }
+
+    @keyframes pulse {
+        0% { opacity: 1; }
+        100% { opacity: 0.65; }
+    }
+
+    .lang-btn-group {
+        display: inline-flex;
+        border: 1px solid var(--gray-300);
+        border-radius: var(--radius);
+        overflow: hidden;
+    }
+
+    .lang-btn {
+        background: #ffffff;
+        border: none;
+        padding: 0.35rem 0.75rem;
+        font-size: 0.85rem;
+        font-weight: 600;
+        cursor: pointer;
+        color: var(--gray-600);
+        border-right: 1px solid var(--gray-300);
+    }
+
+    .lang-btn:last-child {
+        border-right: none;
+    }
+
+    .lang-btn.active {
+        background: var(--primary);
+        color: #ffffff;
+    }
+
+    .palette-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.35rem;
+        margin-bottom: 1.5rem;
+        padding: 0.75rem;
+        background: #ffffff;
+        border: 1px solid var(--gray-200);
+        border-radius: var(--radius);
+    }
+
+    .palette-btn {
+        width: 32px;
+        height: 32px;
+        border-radius: 4px;
+        border: 1px solid var(--gray-300);
+        background: var(--gray-50);
+        color: var(--gray-800);
+        font-size: 0.85rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        text-decoration: none;
+        transition: all 0.15s ease;
+    }
+
+    .palette-btn.answered {
+        background: var(--success);
+        color: #ffffff;
+        border-color: var(--success);
+    }
+
+    .palette-btn:hover {
+        border-color: var(--primary);
+    }
+
+    .option-label {
+        display: block;
+        padding: 0.65rem 1rem;
+        margin: 0.4rem 0;
+        background: var(--gray-50);
+        border: 1px solid var(--gray-200);
+        border-radius: var(--radius);
+        cursor: pointer;
+        transition: all 0.15s ease;
+    }
+
+    .option-label:hover {
+        background: var(--primary-light);
+        border-color: var(--primary);
+    }
+
+    .option-label input[type="radio"] {
+        margin-right: 0.6rem;
+    }
+
+    .scorecard-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+        gap: 1rem;
+        margin: 1.25rem 0;
+    }
+
+    .metric-card {
+        background: var(--gray-50);
+        border: 1px solid var(--gray-200);
+        border-radius: var(--radius);
+        padding: 1rem;
+        text-align: center;
+    }
+
+    .metric-value {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--primary);
+        margin-top: 0.25rem;
+    }
+
+    .review-item {
+        border-left: 4px solid var(--gray-300);
+        margin-bottom: 1.25rem;
+    }
+
+    .review-item.correct {
+        border-left-color: var(--success);
+        background-color: var(--success-bg);
+    }
+
+    .review-item.incorrect {
+        border-left-color: var(--danger);
+        background-color: var(--danger-bg);
+    }
+</style>
+{% endblock %}
+
 {% block content %}
-
-<h2>{{ test.title }}</h2>
-
-<p>{{ test.description }}</p>
-
-
-<p>
-    <strong>Questions:</strong> {{ questions|length }}
-</p>
+<div style="margin-bottom: 1.5rem;">
+    <h2>{{ test.title }}</h2>
+    {% if test.description %}
+        <p style="color: var(--gray-600); margin-top: 0.25rem;">{{ test.description }}</p>
+    {% endif %}
+    <div style="margin-top: 0.5rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+        <span class="badge badge-primary">Exam: {{ test.exam }}</span>
+        {% if test.paper %}
+            <span class="badge badge-primary">Paper: {{ test.paper }}</span>
+        {% endif %}
+        <span class="badge">Questions: {{ questions|length }}</span>
+        <span class="badge">Duration: {{ test.duration_minutes }} Mins</span>
+    </div>
+</div>
 
 {% if result %}
 
-    <hr>
+    <!-- P0 Scorecard -->
+    <div class="card" style="border-top: 4px solid var(--primary);">
+        <h3 style="color: var(--primary); margin-bottom: 0.5rem;">Practice Test Scorecard</h3>
+        <p style="color: var(--gray-600); font-size: 0.95rem;">Performance summary for your completed attempt.</p>
 
-    <h3>Test Result</h3>
+        <div class="scorecard-grid">
+            <div class="metric-card">
+                <div style="font-size: 0.85rem; color: var(--gray-600);">Total Questions</div>
+                <div class="metric-value">{{ result.total }}</div>
+            </div>
+            <div class="metric-card">
+                <div style="font-size: 0.85rem; color: var(--gray-600);">Attempted</div>
+                <div class="metric-value">{{ result.attempted }}</div>
+            </div>
+            <div class="metric-card">
+                <div style="font-size: 0.85rem; color: var(--gray-600);">Unanswered</div>
+                <div class="metric-value">{{ result.unanswered }}</div>
+            </div>
+            <div class="metric-card">
+                <div style="font-size: 0.85rem; color: var(--success);">Correct</div>
+                <div class="metric-value" style="color: var(--success);">{{ result.correct }}</div>
+            </div>
+            <div class="metric-card">
+                <div style="font-size: 0.85rem; color: var(--danger);">Wrong</div>
+                <div class="metric-value" style="color: var(--danger);">{{ result.wrong }}</div>
+            </div>
+            <div class="metric-card">
+                <div style="font-size: 0.85rem; color: var(--primary);">Score</div>
+                <div class="metric-value">{{ result.score }} / {{ result.total }}</div>
+            </div>
+            <div class="metric-card">
+                <div style="font-size: 0.85rem; color: var(--primary);">Percentage</div>
+                <div class="metric-value">{{ result.percentage }}%</div>
+            </div>
+        </div>
 
-    <p>
-        <strong>Score:</strong>
-        {{ result.score }} / {{ result.total }}
-    </p>
+        <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; margin-top: 1rem;">
+            <a href="{% url 'take_test' test.pk %}" class="btn btn-primary" onclick="clearTestStorage();">Try Again</a>
+            <a href="{% url 'test_list' %}" class="btn btn-secondary">Back to Tests</a>
+        </div>
+    </div>
 
-    <p>
-        <strong>Percentage:</strong>
-        {{ result.percentage }}%
-    </p>
-
-    <p>
-        <strong>Answered:</strong>
-        {{ result.answered }}
-    </p>
-
-    <p>
-        <strong>Unanswered:</strong>
-        {{ result.unanswered }}
-    </p>
-
-    <hr>
-
-    <h3>Answer Review</h3>
+    <!-- Answer Review -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin: 2rem 0 1rem;">
+        <h3>Detailed Answer Review</h3>
+        <div class="lang-btn-group">
+            <button type="button" class="lang-btn" onclick="setLanguage('hi', this)">हिन्दी</button>
+            <button type="button" class="lang-btn" onclick="setLanguage('en', this)">English</button>
+            <button type="button" class="lang-btn active" onclick="setLanguage('both', this)">Both</button>
+        </div>
+    </div>
 
     {% for item in result.review %}
-
-        <article>
-
-            <h4>
-                Question {{ forloop.counter }}
-            </h4>
-
-            <p>
-                <strong>{{ item.question.question_text }}</strong>
-            </p>
-
-            {% if item.question.question_text_hindi %}
-                <p>{{ item.question.question_text_hindi }}</p>
-            {% endif %}
-
-            {% if item.is_correct %}
-
-                <p>
-                    ✅ <strong>Correct</strong>
-                </p>
-
-            {% else %}
-
-                <p>
-                    ❌ <strong>Incorrect</strong>
-                </p>
-
-            {% endif %}
-
-            <p>
-                <strong>Your answer:</strong>
-
-                {% if item.selected_answer %}
-                    {{ item.selected_answer }}
+        <div class="card review-item {% if item.is_correct %}correct{% else %}incorrect{% endif %}">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                <h4 style="color: var(--gray-800);">Question {{ forloop.counter }}</h4>
+                {% if item.is_correct %}
+                    <span class="badge" style="background-color: var(--success-bg); color: var(--success); font-weight: 700;">✅ Correct</span>
                 {% else %}
-                    Not answered
+                    <span class="badge" style="background-color: var(--danger-bg); color: var(--danger); font-weight: 700;">❌ Incorrect</span>
                 {% endif %}
-            </p>
+            </div>
 
-            <p>
-                <strong>Correct answer:</strong>
-                {{ item.question.correct_answer }}
-            </p>
-
-            {% if item.question.explanation %}
-                <p>
-                    <strong>Explanation:</strong>
-                    {{ item.question.explanation }}
-                </p>
+            <div class="lang-en" style="margin-bottom: 0.5rem; font-weight: 600;">
+                {{ item.question.question_text }}
+            </div>
+            {% if item.question.question_text_hindi %}
+                <div class="lang-hi" style="margin-bottom: 0.75rem; font-weight: 600; color: var(--gray-800);">
+                    {{ item.question.question_text_hindi }}
+                </div>
             {% endif %}
 
-            {% if item.question.explanation_hindi %}
-                <p>
-                    <strong>व्याख्या:</strong>
-                    {{ item.question.explanation_hindi }}
+            <div style="background: #ffffff; padding: 0.75rem 1rem; border-radius: var(--radius); margin: 0.75rem 0; border: 1px solid var(--gray-200);">
+                <p style="margin-bottom: 0.25rem;">
+                    <strong>Your Answer:</strong>
+                    {% if item.selected_answer %}
+                        <span style="font-weight: 700;">{{ item.selected_answer }}</span>
+                    {% else %}
+                        <span style="color: var(--gray-600); font-style: italic;">Not answered</span>
+                    {% endif %}
                 </p>
+                <p style="color: var(--success);">
+                    <strong>Correct Answer:</strong>
+                    <span style="font-weight: 700;">{{ item.question.correct_answer }}</span>
+                </p>
+            </div>
+
+            {% if item.question.explanation or item.question.explanation_hindi %}
+                <div style="margin-top: 0.75rem; padding-top: 0.75rem; border-top: 1px dashed var(--gray-300);">
+                    {% if item.question.explanation %}
+                        <div class="lang-en" style="font-size: 0.95rem; color: var(--gray-800); margin-bottom: 0.35rem;">
+                            <strong>Explanation:</strong> {{ item.question.explanation }}
+                        </div>
+                    {% endif %}
+                    {% if item.question.explanation_hindi %}
+                        <div class="lang-hi" style="font-size: 0.95rem; color: var(--gray-800);">
+                            <strong>व्याख्या:</strong> {{ item.question.explanation_hindi }}
+                        </div>
+                    {% endif %}
+                </div>
             {% endif %}
-
-        </article>
-
-        <hr>
-
+        </div>
     {% endfor %}
 
-    <p>
-        <a href="{% url 'take_test' test.pk %}">
-            Try Again
-        </a>
-    </p>
+    <div style="margin-top: 1.5rem;">
+        <a href="{% url 'take_test' test.pk %}" class="btn btn-primary" onclick="clearTestStorage();">Try Again</a>
+    </div>
 
 {% else %}
 
-   <div id="timer">
-    <strong>Time Remaining:</strong>
-    <span id="time">--:--</span>
-</div>
+    <!-- Sticky Toolbar: Timer, Progress & Language -->
+    <div class="sticky-toolbar">
+        <div id="timer" class="timer-badge">
+            ⏱ <span id="time">--:--</span>
+        </div>
 
-    <hr>
-    <hr>
+        <div style="font-size: 0.95rem; font-weight: 600; color: var(--gray-800);">
+            Attempted: <span id="attempted-counter" style="color: var(--primary);">0</span> / {{ questions|length }}
+        </div>
 
-    <form method="post">
+        <div class="lang-btn-group">
+            <button type="button" class="lang-btn" onclick="setLanguage('hi', this)">हिन्दी</button>
+            <button type="button" class="lang-btn" onclick="setLanguage('en', this)">English</button>
+            <button type="button" class="lang-btn active" onclick="setLanguage('both', this)">Both</button>
+        </div>
 
+        <button type="button" class="btn btn-primary" onclick="handleManualSubmit();">
+            Submit Test
+        </button>
+    </div>
+
+    <!-- Quick Jump Palette -->
+    <div style="margin-bottom: 0.5rem; font-size: 0.85rem; font-weight: 600; color: var(--gray-600);">
+        Question Palette (Click number to jump):
+    </div>
+    <div class="palette-container">
+        {% for question in questions %}
+            <a href="#q-{{ forloop.counter }}" id="palette-btn-{{ question.pk }}" class="palette-btn">
+                {{ forloop.counter }}
+            </a>
+        {% endfor %}
+    </div>
+
+    <!-- Question Form -->
+    <form id="test-form" method="post" action="{% url 'take_test' test.pk %}">
         {% csrf_token %}
 
         {% for question in questions %}
+            <div id="q-{{ forloop.counter }}" class="card question-card" style="scroll-margin-top: 130px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                    <h3 style="font-size: 1.1rem; color: var(--primary);">Question {{ forloop.counter }}</h3>
+                    {% if question.difficulty %}
+                        <span class="badge">{{ question.difficulty }}</span>
+                    {% endif %}
+                </div>
 
-            <article>
-
-                <h3>
-                    Question {{ forloop.counter }}
-                </h3>
-
-                <p>
-                    <strong>{{ question.question_text }}</strong>
-                </p>
-
+                <div class="lang-en" style="margin-bottom: 0.5rem; font-weight: 600; font-size: 1.05rem;">
+                    {{ question.question_text }}
+                </div>
                 {% if question.question_text_hindi %}
-                    <p>{{ question.question_text_hindi }}</p>
+                    <div class="lang-hi" style="margin-bottom: 0.75rem; font-weight: 600; font-size: 1.05rem; color: var(--gray-800);">
+                        {{ question.question_text_hindi }}
+                    </div>
                 {% endif %}
 
-                <label>
-                    <input
-                        type="radio"
-                        name="question_{{ question.pk }}"
-                        value="A"
-                    >
-                    A. {{ question.option_a }}
-                </label>
+                <div style="margin-top: 1rem;">
+                    <label class="option-label">
+                        <input type="radio" name="question_{{ question.pk }}" value="A" onchange="onAnswerSelected({{ question.pk }});">
+                        <strong>A.</strong> {{ question.option_a }}
+                    </label>
 
-                <br>
+                    <label class="option-label">
+                        <input type="radio" name="question_{{ question.pk }}" value="B" onchange="onAnswerSelected({{ question.pk }});">
+                        <strong>B.</strong> {{ question.option_b }}
+                    </label>
 
-                <label>
-                    <input
-                        type="radio"
-                        name="question_{{ question.pk }}"
-                        value="B"
-                    >
-                    B. {{ question.option_b }}
-                </label>
+                    <label class="option-label">
+                        <input type="radio" name="question_{{ question.pk }}" value="C" onchange="onAnswerSelected({{ question.pk }});">
+                        <strong>C.</strong> {{ question.option_c }}
+                    </label>
 
-                <br>
-
-                <label>
-                    <input
-                        type="radio"
-                        name="question_{{ question.pk }}"
-                        value="C"
-                    >
-                    C. {{ question.option_c }}
-                </label>
-
-                <br>
-
-                <label>
-                    <input
-                        type="radio"
-                        name="question_{{ question.pk }}"
-                        value="D"
-                    >
-                    D. {{ question.option_d }}
-                </label>
-
-            </article>
-
-            <hr>
-
+                    <label class="option-label">
+                        <input type="radio" name="question_{{ question.pk }}" value="D" onchange="onAnswerSelected({{ question.pk }});">
+                        <strong>D.</strong> {{ question.option_d }}
+                    </label>
+                </div>
+            </div>
         {% endfor %}
 
-        <button type="submit">
-            Submit Test
-        </button>
-
+        <div style="margin: 2rem 0; text-align: center;">
+            <button type="button" class="btn btn-primary" style="padding: 0.75rem 2.5rem; font-size: 1.1rem;" onclick="handleManualSubmit();">
+                Submit Test
+            </button>
+        </div>
     </form>
 
-    <script>
-        const durationMinutes = {{ test.duration_minutes }};
-        let timeRemaining = durationMinutes * 60;
+{% endif %}
+{% endblock %}
 
-        function updateTimer() {
-            const minutes = Math.floor(timeRemaining / 60);
-            const seconds = timeRemaining % 60;
+{% block extra_js %}
+<script>
+    const testId = {{ test.pk }};
+    const totalQuestions = {{ questions|length }};
+    const storageKey = `jhtet_timer_test_${testId}`;
 
-            document.getElementById("time").textContent =
+    function clearTestStorage() {
+        sessionStorage.removeItem(storageKey);
+    }
+
+    // Language Toggle Handling
+    function setLanguage(lang, button) {
+        document.querySelectorAll(".lang-btn").forEach(btn => btn.classList.remove("active"));
+        if (button) {
+            button.classList.add("active");
+        }
+
+        const enElements = document.querySelectorAll(".lang-en");
+        const hiElements = document.querySelectorAll(".lang-hi");
+
+        if (lang === "en") {
+            enElements.forEach(el => el.style.display = "");
+            hiElements.forEach(el => el.style.display = "none");
+        } else if (lang === "hi") {
+            enElements.forEach(el => el.style.display = "none");
+            hiElements.forEach(el => el.style.display = "");
+        } else {
+            enElements.forEach(el => el.style.display = "");
+            hiElements.forEach(el => el.style.display = "");
+        }
+    }
+
+    {% if not result %}
+    // Live Answer Counter & Palette updates
+    function updateProgress() {
+        const form = document.getElementById("test-form");
+        if (!form) return;
+
+        let answeredCount = 0;
+        const checkedRadios = form.querySelectorAll("input[type='radio']:checked");
+        checkedRadios.forEach(radio => {
+            answeredCount++;
+            const name = radio.getAttribute("name");
+            const qId = name.replace("question_", "");
+            const paletteBtn = document.getElementById(`palette-btn-${qId}`);
+            if (paletteBtn) {
+                paletteBtn.classList.add("answered");
+            }
+        });
+
+        const counterEl = document.getElementById("attempted-counter");
+        if (counterEl) {
+            counterEl.textContent = answeredCount;
+        }
+    }
+
+    function onAnswerSelected(questionPk) {
+        const paletteBtn = document.getElementById(`palette-btn-${questionPk}`);
+        if (paletteBtn) {
+            paletteBtn.classList.add("answered");
+        }
+        updateProgress();
+    }
+
+    // Timer Implementation with sessionStorage UX preservation
+    const durationMinutes = {{ test.duration_minutes }};
+    let timeRemaining;
+
+    const savedTime = sessionStorage.getItem(storageKey);
+    if (savedTime && !isNaN(savedTime) && Number(savedTime) > 0) {
+        timeRemaining = parseInt(savedTime, 10);
+    } else {
+        timeRemaining = durationMinutes * 60;
+    }
+
+    let timerInterval = null;
+
+    function updateTimer() {
+        const minutes = Math.floor(timeRemaining / 60);
+        const seconds = timeRemaining % 60;
+        const timeEl = document.getElementById("time");
+        const timerContainer = document.getElementById("timer");
+
+        if (timeEl) {
+            timeEl.textContent =
                 String(minutes).padStart(2, "0") +
                 ":" +
                 String(seconds).padStart(2, "0");
+        }
 
-            if (timeRemaining > 0) {
-                timeRemaining--;
+        if (timeRemaining <= 300 && timerContainer) {
+            timerContainer.classList.add("timer-warning");
+        }
+
+        if (timeRemaining > 0) {
+            timeRemaining--;
+            sessionStorage.setItem(storageKey, timeRemaining);
+        } else {
+            // Timer expired: direct auto-submit without confirmation dialog
+            clearInterval(timerInterval);
+            sessionStorage.removeItem(storageKey);
+            const form = document.getElementById("test-form");
+            if (form) {
+                form.submit();
+            }
+        }
+    }
+
+    updateTimer();
+    timerInterval = setInterval(updateTimer, 1000);
+
+    // Submission Confirmation (Manual vs Auto)
+    function handleManualSubmit() {
+        const form = document.getElementById("test-form");
+        if (!form) return;
+
+        const checkedRadios = form.querySelectorAll("input[type='radio']:checked");
+        const answeredCount = checkedRadios.length;
+        const unansweredCount = totalQuestions - answeredCount;
+
+        if (unansweredCount > 0) {
+            const confirmed = window.confirm(
+                `You have ${unansweredCount} unanswered question(s).\n\nDo you want to submit the test now?`
+            );
+            if (!confirmed) {
+                return;
             }
         }
 
-        updateTimer();
+        clearInterval(timerInterval);
+        sessionStorage.removeItem(storageKey);
+        form.submit();
+    }
 
-        setInterval(updateTimer, 1000);
-    </script>
-
-{% endif %}
-
+    // Initialize progress on load in case of restored inputs
+    document.addEventListener("DOMContentLoaded", function() {
+        updateProgress();
+    });
+    {% endif %}
+</script>
 {% endblock %}

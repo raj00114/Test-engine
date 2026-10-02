@@ -1,51 +1,48 @@
 {% extends "base.html" %}
 
 {% block title %}
-Tests — JHTET Test Engine
+Practice Tests — JHTET Test Engine
 {% endblock %}
 
 {% block content %}
-
-<h2>JHTET Practice Tests</h2>
+<div style="margin-bottom: 1.5rem;">
+    <h2>JHTET Practice Tests</h2>
+    <p style="color: var(--gray-600); margin-top: 0.25rem;">
+        Select a mock test to practice under simulated exam timing with immediate scorecard analysis.
+    </p>
+</div>
 
 {% if tests %}
+    <div style="display: flex; flex-direction: column; gap: 1rem;">
+        {% for test in tests %}
+            <div class="card" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+                <div style="flex: 1; min-width: 250px;">
+                    <h3 style="color: var(--primary); margin-bottom: 0.35rem;">{{ test.title }}</h3>
+                    {% if test.description %}
+                        <p style="color: var(--gray-600); font-size: 0.95rem; margin-bottom: 0.75rem;">{{ test.description }}</p>
+                    {% endif %}
 
-    {% for test in tests %}
+                    <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                        <span class="badge badge-primary">{{ test.exam }}</span>
+                        {% if test.paper %}
+                            <span class="badge">{{ test.paper }}</span>
+                        {% endif %}
+                        <span class="badge">⏱ Duration: {{ test.duration_minutes }} minutes</span>
+                        <span class="badge">❓ {{ test.questions.count }} Questions</span>
+                    </div>
+                </div>
 
-        <article>
-            <h3>{{ test.title }}</h3>
-
-            <p>{{ test.description }}</p>
-
-            <p>
-                <strong>Exam:</strong> {{ test.exam }}
-            </p>
-
-            <p>
-                <strong>Paper:</strong> {{ test.paper }}
-            </p>
-
-            <p>
-                <strong>Duration:</strong> {{ test.duration_minutes }} minutes
-            </p>
-
-            <p>
-                <strong>Questions:</strong> {{ test.questions.count }}
-            </p>
-
-            <a href="{% url 'take_test' test.pk %}">
-                Start Test
-            </a>
-        </article>
-
-        <hr>
-
-    {% endfor %}
-
+                <div>
+                    <a href="{% url 'take_test' test.pk %}" class="btn btn-primary" style="white-space: nowrap;">
+                        Start Test &rarr;
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
 {% else %}
-
-    <p>No published tests are available yet.</p>
-
+    <div class="card">
+        <p>No published practice tests are available yet. Please check back later.</p>
+    </div>
 {% endif %}
-
 {% endblock %}
