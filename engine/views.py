@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404, render
+from django.utils import timezone
 
 from .models import Test
 
@@ -9,11 +10,15 @@ def home(request):
         .filter(is_published=True)
         .order_by("-created_at")[:6]
     )
+    recent_results = request.session.get("recent_test_results", [])
 
     return render(
         request,
         "home.html",
-        {"tests": tests},
+        {
+            "tests": tests,
+            "recent_results": recent_results,
+        },
     )
 
 
@@ -23,11 +28,15 @@ def test_list(request):
         .filter(is_published=True)
         .order_by("-created_at")
     )
+    recent_results = request.session.get("recent_test_results", [])
 
     return render(
         request,
         "tests/list.html",
-        {"tests": tests},
+        {
+            "tests": tests,
+            "recent_results": recent_results,
+        },
     )
 
 
@@ -67,7 +76,12 @@ def take_test(request, pk):
                     "is_correct": is_correct,
                 }
             )
+
         total = len(questions)
+        attempted = answered
+        unanswered = total - attempted
+        correct = score
+        wrong = attempted - correct
         percentage = (
             round((score / total) * 100, 1)
             if total > 0
@@ -75,13 +89,34 @@ def take_test(request, pk):
         )
 
         result = {
-                "score": score,
-                "total": total,
-                "percentage": percentage,
-                "answered": answered,
-                "unanswered": total - answered,
-                "review": review,
+            "total": total,
+            "attempted": attempted,
+            "unanswered": unanswered,
+            "correct": correct,
+            "wrong": wrong,
+            "score": score,
+            "percentage": percentage,
+            "review": review,
         }
+
+        # Store in rolling session history (strictly last 5 results)
+        recent = request.session.get("recent_test_results", [])
+        new_entry = {
+            "test_id": test.pk,
+            "test_title": test.title,
+            "submitted_at": timezone.now().strftime("%Y-%m-%d %H:%M"),
+            "total": total,
+            "attempted": attempted,
+            "unanswered": unanswered,
+            "correct": correct,
+            "wrong": wrong,
+            "score": score,
+            "percentage": percentage,
+        }
+        request.session["recent_test_results"] = [new_entry] + recent[:4]
+        request.session.modified = True
+
+    recent_results = request.session.get("recent_test_results", [])
 
     return render(
         request,
@@ -90,5 +125,6 @@ def take_test(request, pk):
             "test": test,
             "questions": questions,
             "result": result,
+            "recent_results": recent_results,
         },
     )

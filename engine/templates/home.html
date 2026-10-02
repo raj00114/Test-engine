@@ -5,31 +5,72 @@ Home — JHTET Test Engine
 {% endblock %}
 
 {% block content %}
+<div class="card" style="background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); color: #ffffff; padding: 2rem; border: none; margin-bottom: 2rem;">
+    <h2 style="font-size: 1.8rem; margin-bottom: 0.5rem;">Prepare for JHTET 2026</h2>
+    <p style="font-size: 1.05rem; opacity: 0.95; max-width: 700px; margin-bottom: 1.25rem;">
+        Jharkhand Teacher Eligibility Test practice platform. Practice bilingual questions, take timed mock tests, and track your recent session performance.
+    </p>
+    <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+        <a href="{% url 'test_list' %}" class="btn" style="background: #ffffff; color: var(--primary);">Start Practicing Tests</a>
+        <a href="{% url 'syllabus_list' %}" class="btn" style="background: rgba(255,255,255,0.2); color: #ffffff; border: 1px solid rgba(255,255,255,0.4);">View JHTET Syllabus</a>
+    </div>
+</div>
 
-<h2>Prepare for JHTET 2026</h2>
-
-<p>
-    Practice JHTET questions, take mock tests, and improve your preparation.
-</p>
-
-<h3>Available Tests</h3>
-
-{% if tests %}
-
-    <ul>
-        {% for test in tests %}
-            <li>
-                <a href="{% url 'take_test' test.pk %}">
-                    {{ test.title }}
-                </a>
-            </li>
-        {% endfor %}
-    </ul>
-
-{% else %}
-
-    <p>No tests are available yet.</p>
-
+{% if recent_results %}
+    <div class="card" style="margin-bottom: 2rem; border-left: 4px solid var(--primary);">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+            <h3 style="color: var(--primary);">Recent Practice Attempts (Session History)</h3>
+            <span class="badge badge-primary">Last {{ recent_results|length }} attempts</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+            {% for item in recent_results %}
+                <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem 1rem; background: var(--gray-50); border: 1px solid var(--gray-200); border-radius: var(--radius); flex-wrap: wrap; gap: 0.5rem;">
+                    <div>
+                        <div style="font-weight: 600; color: var(--gray-900);">{{ item.test_title }}</div>
+                        <div style="font-size: 0.85rem; color: var(--gray-600);">Submitted: {{ item.submitted_at }}</div>
+                    </div>
+                    <div style="display: flex; gap: 1rem; align-items: center;">
+                        <span style="font-size: 0.9rem; color: var(--gray-800);">Score: <strong>{{ item.score }} / {{ item.total }}</strong> ({{ item.percentage }}%)</span>
+                        <a href="{% url 'take_test' item.test_id %}" class="btn btn-secondary" style="padding: 0.35rem 0.75rem; font-size: 0.85rem;">Retake</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
 {% endif %}
 
+<div style="margin-bottom: 1rem; display: flex; justify-content: space-between; align-items: center;">
+    <h3>Available Mock Tests</h3>
+    <a href="{% url 'test_list' %}" style="color: var(--primary); font-weight: 600; text-decoration: none; font-size: 0.95rem;">View All &rarr;</a>
+</div>
+
+{% if tests %}
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem;">
+        {% for test in tests %}
+            <div class="card" style="display: flex; flex-direction: column; justify-content: space-between; margin-bottom: 0;">
+                <div>
+                    <h4 style="color: var(--primary); margin-bottom: 0.5rem;">{{ test.title }}</h4>
+                    <p style="color: var(--gray-600); font-size: 0.9rem; margin-bottom: 1rem;">
+                        {{ test.description|truncatewords:15|default:"Full mock test for JHTET examination preparation." }}
+                    </p>
+                    <div style="display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1.25rem;">
+                        <span class="badge badge-primary">{{ test.exam }}</span>
+                        {% if test.paper %}
+                            <span class="badge">{{ test.paper }}</span>
+                        {% endif %}
+                        <span class="badge">⏱ {{ test.duration_minutes }}m</span>
+                        <span class="badge">❓ {{ test.questions.count }} Qs</span>
+                    </div>
+                </div>
+                <div>
+                    <a href="{% url 'take_test' test.pk %}" class="btn btn-primary" style="width: 100%; text-align: center;">Start Practice Test</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <div class="card">
+        <p>No tests are published yet. Check back soon or create tests in the admin panel.</p>
+    </div>
+{% endif %}
 {% endblock %}
